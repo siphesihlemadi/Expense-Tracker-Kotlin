@@ -45,8 +45,24 @@ fun filterByCategory() {
 fun filterByDate() {
     print("What date would you like to see? ")
     val dateChoice = readln()
-    for (expense in expenses){
-        if(expense.containsValue(dateChoice)){
+    for (expense in expenses) {
+        if (expense.containsValue(dateChoice)) {
+            println("(1) --> $expense")
+        }
+    }
+}
+
+fun filterByAmountRange() {
+    print("Enter lower limit in the range: ")
+    val lowerLimitRange = readln().toDoubleOrNull()
+    print("Enter upper limit in the range: ")
+    val upperLimitRange = readln().toDoubleOrNull()
+
+    for (expense in expenses) {
+        if (lowerLimitRange == null || upperLimitRange == null) {
+            println("Invalid Input")
+            break
+        } else if (expense["amount"]?.toDouble()!! > lowerLimitRange && expense["amount"]?.toDouble()!! < upperLimitRange) {
             println("(1) --> $expense")
         }
     }
