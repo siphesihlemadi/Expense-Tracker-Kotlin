@@ -25,3 +25,22 @@ replay_pid*
 
 # Kotlin Gradle plugin data, see https://kotlinlang.org/docs/whatsnew20.html#new-directory-for-kotlin-data-in-gradle-projects
 .kotlin/
+# IntelliJ IDEA project files
+.idea/
+*.iml
+
+# Build output
+/out/
+build/
+
+# Kotlin-specific
+.kotlin/
+
+# Ignore version control system files
+.vcs/
+
+# Ignore IDE-specific XML configs
+*.xml
+
+# Ignore all .gitignore files inside subdirectories if desired (optional)
+**/.gitignore
