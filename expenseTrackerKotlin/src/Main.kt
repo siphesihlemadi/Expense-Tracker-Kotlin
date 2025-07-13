@@ -76,3 +76,16 @@ fun overallTotal(): Double {
 
     return total
 }
+
+fun totalExpenseByCategory(){
+    var total = 0.0
+    print("Enter the category you want: ")
+    val categoryTotal = readln()
+
+    for(expense in expenses){
+        if(expense.containsValue(categoryTotal)){
+            total += expense["amount"]?.toDouble()!!
+        }
+    }
+    println("The overall total with $categoryTotal is R$total")
+}
