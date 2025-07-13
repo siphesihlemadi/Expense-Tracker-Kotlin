@@ -31,3 +31,13 @@ fun viewAllExpenses(){
         count++
     }
 }
+
+fun filterByCategory(){
+    print("Enter the category you want: ")
+    val categoryChoice = readln()
+    for(expense in expenses){
+        if(expense.containsValue(categoryChoice)){
+            println("(1) ---> $expense")
+        }
+    }
+}
