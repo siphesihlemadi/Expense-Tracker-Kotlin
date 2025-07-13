@@ -4,7 +4,7 @@ fun main() {
 
 }
 
-fun addExpense(){
+fun addExpense() {
     print("Enter the description of the expense: ")
     val description = readln()
     print("Enter the amount paid: ")
@@ -24,20 +24,30 @@ fun addExpense(){
     expenses.add(expense)
 }
 
-fun viewAllExpenses(){
-    var count =1
-    for(expense in expenses){
+fun viewAllExpenses() {
+    var count = 1
+    for (expense in expenses) {
         println("$count ---> $expense")
         count++
     }
 }
 
-fun filterByCategory(){
+fun filterByCategory() {
     print("Enter the category you want: ")
     val categoryChoice = readln()
-    for(expense in expenses){
-        if(expense.containsValue(categoryChoice)){
+    for (expense in expenses) {
+        if (expense.containsValue(categoryChoice)) {
             println("(1) ---> $expense")
+        }
+    }
+}
+
+fun filterByDate() {
+    print("What date would you like to see? ")
+    val dateChoice = readln()
+    for (expense in expenses){
+        if(expense.containsValue(dateChoice)){
+            println("(1) --> $expense")
         }
     }
 }
