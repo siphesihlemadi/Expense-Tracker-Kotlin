@@ -1,14 +1,25 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-fun main() {
-    val name = "Kotlin"
-    //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-    // to see how IntelliJ IDEA suggests fixing it.
-    println("Hello, " + name + "!")
+var expenses = mutableListOf<MutableMap<String, String>>()
 
-    for (i in 1..5) {
-        //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-        // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        println("i = $i")
-    }
+fun main() {
+
+}
+
+fun addExpense(){
+    print("Enter the description of the expense: ")
+    val description = readln()
+    print("Enter the amount paid: ")
+    val amount = readln()
+    print("Enter the category of the expense: ")
+    val category = readln()
+    print("Enter the date paid: ")
+    val date = readln()
+
+    val expense = mutableMapOf(
+        "description" to description,
+        "amount" to amount,
+        "category" to category,
+        "date" to date
+    )
+
+    expenses.add(expense)
 }
