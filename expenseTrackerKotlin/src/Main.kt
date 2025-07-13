@@ -67,3 +67,12 @@ fun filterByAmountRange() {
         }
     }
 }
+
+fun overallTotal(): Double {
+    var total = 0.0
+    for (expense in expenses) {
+        total += expense["amount"]?.toDouble()!!
+    }
+
+    return total
+}
