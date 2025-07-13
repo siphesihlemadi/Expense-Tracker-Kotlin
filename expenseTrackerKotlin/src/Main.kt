@@ -77,15 +77,33 @@ fun overallTotal(): Double {
     return total
 }
 
-fun totalExpenseByCategory(){
+fun totalExpenseByCategory() {
     var total = 0.0
     print("Enter the category you want: ")
     val categoryTotal = readln()
 
-    for(expense in expenses){
-        if(expense.containsValue(categoryTotal)){
+    for (expense in expenses) {
+        if (expense.containsValue(categoryTotal)) {
             total += expense["amount"]?.toDouble()!!
         }
     }
     println("The overall total with $categoryTotal is R$total")
+}
+
+fun deleteExpense() {
+    var index = 0
+    for (expense in expenses) {
+        index++
+        println("\t\t($index) --> $expense\n")
+    }
+
+    print("Enter the index of the expense you want to remove: ")
+    val elementRemove = readln().toInt()
+    var count = 1
+    for (expense in expenses) {
+        if (count == elementRemove) {
+            expenses.remove(expense)
+        }
+        count++
+    }
 }
