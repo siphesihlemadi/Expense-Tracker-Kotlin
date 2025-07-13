@@ -23,3 +23,11 @@ fun addExpense(){
 
     expenses.add(expense)
 }
+
+fun viewAllExpenses(){
+    var count =1
+    for(expense in expenses){
+        println("$count ---> $expense")
+        count++
+    }
+}
