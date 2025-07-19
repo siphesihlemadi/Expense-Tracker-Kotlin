@@ -1,7 +1,36 @@
+import java.util.Scanner
+
 var expenses = mutableListOf<MutableMap<String, String>>()
 
 fun main() {
-
+    var userChoice = 0
+    do {
+        println("********************************")
+        println("Expense Tracker\t\t${overallTotal()}")
+        println("********************************")
+        println(
+            "1. Add Expense\n" +
+                    "2. View All Expenses\n" +
+                    "3. Filter By Category\n" +
+                    "4. Filter By Amount Range\n" +
+                    "5. Filter By Date\n" +
+                    "6. Total Expense By Category\n" +
+                    "7. Delete Expense\n" +
+                    "99. Exit"
+        )
+        userChoice = readln().toInt()
+        when (userChoice) {
+            1 -> addExpense()
+            2 -> viewAllExpenses()
+            3 -> filterByCategory()
+            4 -> filterByAmountRange()
+            5 -> filterByDate()
+            6 -> totalExpenseByCategory()
+            7 -> deleteExpense()
+            99 -> userChoice = 99
+            else -> println("Invalid Input")
+        }
+    } while (userChoice != 99)
 }
 
 fun addExpense() {
@@ -99,11 +128,8 @@ fun deleteExpense() {
 
     print("Enter the index of the expense you want to remove: ")
     val elementRemove = readln().toInt()
-    var count = 1
-    for (expense in expenses) {
-        if (count == elementRemove) {
-            expenses.remove(expense)
-        }
-        count++
+    for (i in 0..expenses.size) {
+        if (elementRemove == i + 1)
+            expenses.removeAt(i)
     }
 }
