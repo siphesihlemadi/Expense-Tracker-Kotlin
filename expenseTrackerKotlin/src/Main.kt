@@ -1,9 +1,8 @@
-import java.util.Scanner
 
 var expenses = mutableListOf<MutableMap<String, String>>()
 
 fun main() {
-    var userChoice = 0
+    var userChoice: Int
     do {
         println("********************************")
         println("Expense Tracker\t\t${overallTotal()}")
