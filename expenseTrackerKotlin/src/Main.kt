@@ -1,8 +1,10 @@
+import java.time.LocalDate
+import java.time.format.DateTimeParseException
 
 var expenses = mutableListOf<MutableMap<String, String>>()
 
 fun main() {
-    var userChoice:Int =0
+    var userChoice = 0
     do {
         println("********************************")
         println("Expense Tracker\t\t${overallTotal()}")
@@ -17,8 +19,8 @@ fun main() {
                     "7. Delete Expense\n" +
                     "99. Exit"
         )
-        try{
-                userChoice = readln().toInt()
+        try {
+            userChoice = readln().toInt()
 
             when (userChoice) {
                 1 -> addExpense()
@@ -31,30 +33,40 @@ fun main() {
                 99 -> userChoice = 99
                 else -> throw NumberFormatException()
             }
-        }catch (e: NumberFormatException){
+        } catch (e: NumberFormatException) {
             println("Please enter a numeric value")
         }
     } while (userChoice != 99)
 }
 
 fun addExpense() {
-    print("Enter the description of the expense: ")
-    val description = readln()
-    print("Enter the amount paid: ")
-    val amount = readln()
-    print("Enter the category of the expense: ")
-    val category = readln()
-    print("Enter the date paid: ")
-    val date = readln()
+    try {
+        print("Enter the description of the expense: ")
+        val description = readln().takeIf { it.isNotBlank() } ?: throw NullPointerException("Description cannot be empty")
+        print("Enter the amount paid: ")
+        val amount = readln().toDouble()
+        print("Enter the category of the expense: ")
+        val category = readln().takeIf { it.isNotBlank() } ?: throw NullPointerException("Category cannot be empty.")
+        print("Enter the date paid: ")
+        val date = readln().takeIf { it.isNotBlank() }?:throw NullPointerException("Date cannot be empty.")
+        val parsedDate = LocalDate.parse(date)
 
-    val expense = mutableMapOf(
-        "description" to description,
-        "amount" to amount,
-        "category" to category,
-        "date" to date
-    )
+        val expense = mutableMapOf(
+            "description" to description,
+            "amount" to amount.toString(),
+            "category" to category,
+            "date" to parsedDate.toString()
+        )
 
-    expenses.add(expense)
+        expenses.add(expense)
+    } catch (e: NumberFormatException) {
+        println("Please enter numeric value for amount.")
+    } catch (e: DateTimeParseException) {
+        println("Please enter date in YY-MM-DD format. e.g. 2000-01-01")
+    } catch (e: NullPointerException) {
+        println("Message: ${e.message}")
+    }
+
 }
 
 fun viewAllExpenses() {
