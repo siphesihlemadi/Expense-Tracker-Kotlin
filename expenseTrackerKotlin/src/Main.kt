@@ -2,7 +2,7 @@
 var expenses = mutableListOf<MutableMap<String, String>>()
 
 fun main() {
-    var userChoice: Int
+    var userChoice:Int =0
     do {
         println("********************************")
         println("Expense Tracker\t\t${overallTotal()}")
@@ -17,17 +17,22 @@ fun main() {
                     "7. Delete Expense\n" +
                     "99. Exit"
         )
-        userChoice = readln().toInt()
-        when (userChoice) {
-            1 -> addExpense()
-            2 -> viewAllExpenses()
-            3 -> filterByCategory()
-            4 -> filterByAmountRange()
-            5 -> filterByDate()
-            6 -> totalExpenseByCategory()
-            7 -> deleteExpense()
-            99 -> userChoice = 99
-            else -> println("Invalid Input")
+        try{
+                userChoice = readln().toInt()
+
+            when (userChoice) {
+                1 -> addExpense()
+                2 -> viewAllExpenses()
+                3 -> filterByCategory()
+                4 -> filterByAmountRange()
+                5 -> filterByDate()
+                6 -> totalExpenseByCategory()
+                7 -> deleteExpense()
+                99 -> userChoice = 99
+                else -> throw NumberFormatException()
+            }
+        }catch (e: NumberFormatException){
+            println("Please enter a numeric value")
         }
     } while (userChoice != 99)
 }
