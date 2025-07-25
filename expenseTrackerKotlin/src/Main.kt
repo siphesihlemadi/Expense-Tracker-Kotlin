@@ -78,13 +78,22 @@ fun viewAllExpenses() {
 }
 
 fun filterByCategory() {
+    var found = false
     print("Enter the category you want: ")
     val categoryChoice = readln()
+    if(categoryChoice.isEmpty()){
+        println("PLease enter a description.")
+        return
+    }
+
     for (expense in expenses) {
         if (expense.containsValue(categoryChoice)) {
             println("(1) ---> $expense")
+            found = true;
         }
     }
+    if (!found)
+        println("Category not found")
 }
 
 fun filterByDate() {
