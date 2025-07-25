@@ -42,13 +42,14 @@ fun main() {
 fun addExpense() {
     try {
         print("Enter the description of the expense: ")
-        val description = readln().takeIf { it.isNotBlank() } ?: throw NullPointerException("Description cannot be empty")
+        val description =
+            readln().takeIf { it.isNotBlank() } ?: throw NullPointerException("Description cannot be empty")
         print("Enter the amount paid: ")
         val amount = readln().toDouble()
         print("Enter the category of the expense: ")
         val category = readln().takeIf { it.isNotBlank() } ?: throw NullPointerException("Category cannot be empty.")
         print("Enter the date paid: ")
-        val date = readln().takeIf { it.isNotBlank() }?:throw NullPointerException("Date cannot be empty.")
+        val date = readln().takeIf { it.isNotBlank() } ?: throw NullPointerException("Date cannot be empty.")
         val parsedDate = LocalDate.parse(date)
 
         val expense = mutableMapOf(
@@ -81,7 +82,7 @@ fun filterByCategory() {
     var found = false
     print("Enter the category you want: ")
     val categoryChoice = readln()
-    if(categoryChoice.isEmpty()){
+    if (categoryChoice.isEmpty()) {
         println("PLease enter a description.")
         return
     }
@@ -89,7 +90,7 @@ fun filterByCategory() {
     for (expense in expenses) {
         if (expense.containsValue(categoryChoice)) {
             println("(1) ---> $expense")
-            found = true;
+            found = true
         }
     }
     if (!found)
@@ -97,12 +98,30 @@ fun filterByCategory() {
 }
 
 fun filterByDate() {
-    print("What date would you like to see? ")
-    val dateChoice = readln()
-    for (expense in expenses) {
-        if (expense.containsValue(dateChoice)) {
-            println("(1) --> $expense")
+    var found = false
+    val dateChoice: String
+    var exceptionBoolean = false
+
+    try{
+        print("What date would you like to see? ")
+        val date = readln().takeIf { it.isNotBlank() } ?: throw NullPointerException("Date cannot be empty.")
+        dateChoice = LocalDate.parse(date).toString()
+
+        for (expense in expenses) {
+            if (expense.containsValue(dateChoice)) {
+                println("(1) --> $expense")
+                found = true
+            }
         }
+    }catch (e: DateTimeParseException){
+        exceptionBoolean = true
+        println("Date must be YY-MM-DD. e.g. 2000-01-01")
+    }catch (e: NullPointerException){
+        exceptionBoolean = true
+        println(e.message)
+    }finally {
+        if(!found && !exceptionBoolean)
+            println("Expense not found with that date.")
     }
 }
 
