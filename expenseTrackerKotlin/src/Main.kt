@@ -67,6 +67,8 @@ fun addExpense() {
 }
 
 fun viewAllExpenses() {
+    if(printIfEmpty())
+        return
     var count = 1
     for (expense in expenses) {
         println("$count ---> $expense")
@@ -74,7 +76,8 @@ fun viewAllExpenses() {
     }
 }
 
-fun filterByCategory() { //enter if expense list is empty check
+fun filterByCategory() {
+    if(printIfEmpty()) return
     var found = false
     print("Enter the category you want: ")
     val categoryChoice =
@@ -91,6 +94,7 @@ fun filterByCategory() { //enter if expense list is empty check
 }
 
 fun filterByDate() {
+    if(printIfEmpty()) return
     var found = false
     val dateChoice: String
 
@@ -110,10 +114,7 @@ fun filterByDate() {
 }
 
 fun filterByAmountRange() {
-    if (expenses.isEmpty()) {
-        println("Expense List is empty.")
-        return
-    }
+    if(printIfEmpty()) return
     print("Enter lower limit in the range: ")
     val lowerLimitRange =
         readln().toDoubleOrNull() ?: throw NumberFormatException("Lower Limit value should be entered and be numeric.")
@@ -143,6 +144,7 @@ fun overallTotal(): Double {
 }
 
 fun totalExpenseByCategory() {
+    if(printIfEmpty()) return
     var total = 0.0
     var isFound = false
     print("Enter the category you want: ")
@@ -164,10 +166,7 @@ fun totalExpenseByCategory() {
 }
 
 fun deleteExpense() {
-    if (expenses.isEmpty()) {
-        println("Expense List is empty")
-        return
-    }
+    if(printIfEmpty()) return
     var index = 0
     for (expense in expenses) {
         index++
@@ -180,4 +179,14 @@ fun deleteExpense() {
         if (elementRemove == i + 1)
             expenses.removeAt(i)
     }
+}
+
+enum class Message(val text: String){
+    EMPTY_LIST("Expense List Is Empty.")
+}
+
+fun printIfEmpty():Boolean{
+    if(expenses.isEmpty())
+        println(Message.EMPTY_LIST.text)
+    return true
 }
