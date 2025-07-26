@@ -1,14 +1,34 @@
+/**
+ * ExpenseTracker.kt
+ *
+ * A simple Kotlin console application to track user expenses.
+ * Allows users to add, view, filter, and delete expenses based on different criteria.
+ *
+ * Author: Siphesihle Madi
+ * Last updated: July 2025
+ */
+
+
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
+/**
+ * Represents an expense with description, amount, category, and date.
+ */
 data class Expense(val description: String, val amount: Double, val category: String, val date: LocalDate)
+
 var expenses = mutableListOf<Expense>()
 
+/**
+ * Entry point of the expense tracking application.
+ * Presents a menu to the user for various operations:
+ * adding, viewing, filtering, deleting expenses, and exiting.
+ */
 fun main() {
     var userChoice = 0
     do {
         println("********************************")
-        println("Expense Tracker\t\t${overallTotal()}")
+        println("Expense Tracker\t\t${calculateOverallTotal()}")
         println("********************************")
         println(
             "1. Add Expense\n" +
@@ -20,6 +40,7 @@ fun main() {
                     "7. Delete Expense\n" +
                     "99. Exit"
         )
+        // Handle user input with exception handling for invalid types
         try {
             userChoice = readln().toIntOrNull() ?: throw NumberFormatException("Please enter the valid index.")
 
@@ -29,7 +50,7 @@ fun main() {
                 3 -> filterByCategory()
                 4 -> filterByAmountRange()
                 5 -> filterByDate()
-                6 -> totalExpenseByCategory()
+                6 -> calculateTotalByCategory()
                 7 -> deleteExpense()
                 99 -> userChoice = 99
                 else -> throw NumberFormatException()
@@ -44,6 +65,13 @@ fun main() {
     } while (userChoice != 99)
 }
 
+/**
+ * Adds a new expense to the global expenses list.
+ *
+ * @throws NullPointerException if any input is blank
+ * @throws NumberFormatException if the amount is not a valid number
+ * @throws DateTimeParseException if the date is not in correct format
+ */
 fun addExpense() {
     print("Enter the description of the expense: ")
     val description =
@@ -61,6 +89,11 @@ fun addExpense() {
     expenses.add(expense)
 }
 
+/**
+ * View all expenses in the global expense list.
+ *
+ * returns early if global expenses list is empty.
+ */
 fun viewAllExpenses() {
     if (printIfEmpty()) return
 
@@ -69,6 +102,11 @@ fun viewAllExpenses() {
     }
 }
 
+/**
+ * Filters global expenses list by category and outputs it to the console.
+ *
+ * @throws NullPointerException if any input is blank
+ */
 fun filterByCategory() {
     if (printIfEmpty()) return
     var found = false
@@ -86,6 +124,12 @@ fun filterByCategory() {
         println("Category not found")
 }
 
+/**
+ * Filters global list by date and outputs it to the console.
+ *
+ * @throws NullPointerException if any input is blank
+ * @throws DateTimeParseException if the date is not in correct format
+ */
 fun filterByDate() {
     if (printIfEmpty()) return
     var found = false
@@ -105,6 +149,12 @@ fun filterByDate() {
 
 }
 
+/**
+ * Filters global expenses list by amount range specified by user.
+ *
+ * @throws NullPointerException if any input is blank
+ * @throws NumberFormatException if the amount is not a valid number
+ */
 fun filterByAmountRange() {
     if (printIfEmpty()) return
     print("Enter lower limit in the range: ")
@@ -126,7 +176,11 @@ fun filterByAmountRange() {
     }
 }
 
-fun overallTotal(): Double {
+/**
+ * Calculates overall total amount of the expenses list.
+ *
+ */
+fun calculateOverallTotal(): Double {
     var total = 0.0
     for (expense in expenses) {
         total += expense.amount
@@ -135,7 +189,12 @@ fun overallTotal(): Double {
     return total
 }
 
-fun totalExpenseByCategory() {
+/**
+ * Calculate overall total by category from global expenses list.
+ *
+ * @throws NullPointerException if any input is blank
+ */
+fun calculateTotalByCategory() {
     if (printIfEmpty()) return
     var total = 0.0
     var isFound = false
@@ -157,6 +216,11 @@ fun totalExpenseByCategory() {
     }
 }
 
+/**
+ * Deletes expense from the global expenses list.
+ *
+ * @throws NullPointerException if any input is blank
+ */
 fun deleteExpense() {
     if (printIfEmpty()) return
     var index = 0
@@ -173,10 +237,19 @@ fun deleteExpense() {
     }
 }
 
+/**
+ * Standard messages used throughout the application.
+ *
+ */
 enum class Message(val text: String) {
     EMPTY_LIST("Expense List Is Empty.")
 }
 
+/**
+ * Checks if global expenses list is empty and prints to the console the enumeration constant message 'EMPTY_LIST' text.
+ * Returns true if global list is empty and false otherwise.
+ *
+ */
 fun printIfEmpty(): Boolean {
     if (expenses.isEmpty()) {
         println(Message.EMPTY_LIST.text)
