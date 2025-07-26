@@ -126,7 +126,7 @@ fun filterByDate() {
 }
 
 fun filterByAmountRange() {
-    if(expenses.isEmpty()){
+    if (expenses.isEmpty()) {
         println("Expense List is empty.")
         return
     }
@@ -159,29 +159,34 @@ fun overallTotal(): Double {
 fun totalExpenseByCategory() {
     var total = 0.0
     var isFound = false
-    try{
+    try {
         print("Enter the category you want: ")
-        val categoryTotal = readln().takeIf { it.isNotBlank() }?:throw NullPointerException("Category cannot be empty.")
+        val categoryTotal =
+            readln().takeIf { it.isNotBlank() } ?: throw NullPointerException("Category cannot be empty.")
 
         for (expense in expenses) {
             if (expense.containsValue(categoryTotal)) {
                 total += expense["amount"]?.toDouble()!!
-                isFound = true;
+                isFound = true
             }
         }
 
-        if(isFound){
+        if (isFound) {
             println("The overall total with $categoryTotal is R$total")
-        }else{
+        } else {
             println("Category does not exist")
         }
 
-    }catch (e: NullPointerException){
+    } catch (e: NullPointerException) {
         println(e.message)
     }
 }
 
 fun deleteExpense() {
+    if(expenses.isEmpty()){
+        println("Expense List is empty")
+        return
+    }
     var index = 0
     for (expense in expenses) {
         index++
@@ -189,9 +194,13 @@ fun deleteExpense() {
     }
 
     print("Enter the index of the expense you want to remove: ")
-    val elementRemove = readln().toInt()
-    for (i in 0..expenses.size) {
-        if (elementRemove == i + 1)
-            expenses.removeAt(i)
+    try{
+        val elementRemove = (readln().takeIf { it.isNotBlank() }?:throw NullPointerException("Enter element to remove.")).toInt()
+        for (i in 0..expenses.size) {
+            if (elementRemove == i + 1)
+                expenses.removeAt(i)
+        }
+    }catch (e: NullPointerException){
+        println(e.message)
     }
 }
