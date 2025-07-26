@@ -20,7 +20,7 @@ fun main() {
                     "99. Exit"
         )
         try {
-            userChoice = readln().toInt()
+            userChoice = readln().toIntOrNull() ?: throw NumberFormatException("Please enter the valid index.")
 
             when (userChoice) {
                 1 -> addExpense()
@@ -34,39 +34,35 @@ fun main() {
                 else -> throw NumberFormatException()
             }
         } catch (e: NumberFormatException) {
-            println("Please enter a numeric value")
+            println(e.message)
+        } catch (e: NullPointerException) {
+            println(e.message)
+        } catch (e: DateTimeParseException) {
+            println("Date must be YY-MM-DD. e.g. 2000-01-01")
         }
     } while (userChoice != 99)
 }
 
 fun addExpense() {
-    try {
-        print("Enter the description of the expense: ")
-        val description =
-            readln().takeIf { it.isNotBlank() } ?: throw NullPointerException("Description cannot be empty")
-        print("Enter the amount paid: ")
-        val amount = readln().toDouble()
-        print("Enter the category of the expense: ")
-        val category = readln().takeIf { it.isNotBlank() } ?: throw NullPointerException("Category cannot be empty.")
-        print("Enter the date paid: ")
-        val date = readln().takeIf { it.isNotBlank() } ?: throw NullPointerException("Date cannot be empty.")
-        val parsedDate = LocalDate.parse(date)
+    print("Enter the description of the expense: ")
+    val description =
+        readln().takeIf { it.isNotBlank() } ?: throw NullPointerException("Description cannot be empty")
+    print("Enter the amount paid: ")
+    val amount = readln().toDoubleOrNull() ?: throw NumberFormatException("Please enter numeric value for amount.")
+    print("Enter the category of the expense: ")
+    val category = readln().takeIf { it.isNotBlank() } ?: throw NullPointerException("Category cannot be empty.")
+    print("Enter the date paid: ")
+    val date = readln().takeIf { it.isNotBlank() } ?: throw NullPointerException("Date cannot be empty.")
+    val parsedDate = LocalDate.parse(date)
 
-        val expense = mutableMapOf(
-            "description" to description,
-            "amount" to amount.toString(),
-            "category" to category,
-            "date" to parsedDate.toString()
-        )
+    val expense = mutableMapOf(
+        "description" to description,
+        "amount" to amount.toString(),
+        "category" to category,
+        "date" to parsedDate.toString()
+    )
 
-        expenses.add(expense)
-    } catch (e: NumberFormatException) {
-        println("Please enter numeric value for amount.")
-    } catch (e: DateTimeParseException) {
-        println("Please enter date in YY-MM-DD format. e.g. 2000-01-01")
-    } catch (e: NullPointerException) {
-        println("Message: ${e.message}")
-    }
+    expenses.add(expense)
 
 }
 
@@ -78,14 +74,11 @@ fun viewAllExpenses() {
     }
 }
 
-fun filterByCategory() {
+fun filterByCategory() { //enter if expense list is empty check
     var found = false
     print("Enter the category you want: ")
-    val categoryChoice = readln()
-    if (categoryChoice.isEmpty()) {
-        println("PLease enter a description.")
-        return
-    }
+    val categoryChoice =
+        readln().takeIf { it.isNotBlank() } ?: throw NullPointerException("PLease enter a description.")
 
     for (expense in expenses) {
         if (expense.containsValue(categoryChoice)) {
@@ -100,29 +93,20 @@ fun filterByCategory() {
 fun filterByDate() {
     var found = false
     val dateChoice: String
-    var exceptionBoolean = false
 
-    try {
-        print("What date would you like to see? ")
-        val date = readln().takeIf { it.isNotBlank() } ?: throw NullPointerException("Date cannot be empty.")
-        dateChoice = LocalDate.parse(date).toString()
+    print("What date would you like to see? ")
+    val date = readln().takeIf { it.isNotBlank() } ?: throw NullPointerException("Date cannot be empty.")
+    dateChoice = LocalDate.parse(date).toString()
 
-        for (expense in expenses) {
-            if (expense.containsValue(dateChoice)) {
-                println("(1) --> $expense")
-                found = true
-            }
+    for (expense in expenses) {
+        if (expense.containsValue(dateChoice)) {
+            println("(1) --> $expense")
+            found = true
         }
-    } catch (e: DateTimeParseException) {
-        exceptionBoolean = true
-        println("Date must be YY-MM-DD. e.g. 2000-01-01")
-    } catch (e: NullPointerException) {
-        exceptionBoolean = true
-        println(e.message)
-    } finally {
-        if (!found && !exceptionBoolean)
-            println("Expense not found with that date.")
     }
+    if (!found)
+        println("Expense not found with that date.")
+
 }
 
 fun filterByAmountRange() {
@@ -131,9 +115,11 @@ fun filterByAmountRange() {
         return
     }
     print("Enter lower limit in the range: ")
-    val lowerLimitRange = readln().toDouble()
+    val lowerLimitRange =
+        readln().toDoubleOrNull() ?: throw NumberFormatException("Lower Limit value should be entered and be numeric.")
     print("Enter upper limit in the range: ")
-    val upperLimitRange = readln().toDouble()
+    val upperLimitRange =
+        readln().toDoubleOrNull() ?: throw NumberFormatException("Upper Limit value should be entered and be numeric.")
 
     for (expense in expenses) {
         if (lowerLimitRange >= 0 && upperLimitRange >= 0) {
@@ -159,31 +145,26 @@ fun overallTotal(): Double {
 fun totalExpenseByCategory() {
     var total = 0.0
     var isFound = false
-    try {
-        print("Enter the category you want: ")
-        val categoryTotal =
-            readln().takeIf { it.isNotBlank() } ?: throw NullPointerException("Category cannot be empty.")
+    print("Enter the category you want: ")
+    val categoryTotal =
+        readln().takeIf { it.isNotBlank() } ?: throw NullPointerException("Category cannot be empty.")
 
-        for (expense in expenses) {
-            if (expense.containsValue(categoryTotal)) {
-                total += expense["amount"]?.toDouble()!!
-                isFound = true
-            }
+    for (expense in expenses) {
+        if (expense.containsValue(categoryTotal)) {
+            total += expense["amount"]?.toDouble()!!
+            isFound = true
         }
+    }
 
-        if (isFound) {
-            println("The overall total with $categoryTotal is R$total")
-        } else {
-            println("Category does not exist")
-        }
-
-    } catch (e: NullPointerException) {
-        println(e.message)
+    if (isFound) {
+        println("The overall total with $categoryTotal is R$total")
+    } else {
+        println("Category does not exist")
     }
 }
 
 fun deleteExpense() {
-    if(expenses.isEmpty()){
+    if (expenses.isEmpty()) {
         println("Expense List is empty")
         return
     }
@@ -194,13 +175,9 @@ fun deleteExpense() {
     }
 
     print("Enter the index of the expense you want to remove: ")
-    try{
-        val elementRemove = (readln().takeIf { it.isNotBlank() }?:throw NullPointerException("Enter element to remove.")).toInt()
-        for (i in 0..expenses.size) {
-            if (elementRemove == i + 1)
-                expenses.removeAt(i)
-        }
-    }catch (e: NullPointerException){
-        println(e.message)
+    val elementRemove = readln().toIntOrNull() ?: throw NullPointerException("Enter element to remove.")
+    for (i in 0..expenses.size) {
+        if (elementRemove == i + 1)
+            expenses.removeAt(i)
     }
 }
