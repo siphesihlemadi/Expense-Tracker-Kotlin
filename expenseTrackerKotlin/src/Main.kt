@@ -231,7 +231,7 @@ fun deleteExpense() {
 
     print("Enter the index of the expense you want to remove: ")
     val elementRemove = readln().toIntOrNull() ?: throw NullPointerException("Enter element to remove.")
-    for (i in 0..expenses.size) {
+    for (i in expenses.indices) {
         if (elementRemove == i + 1)
             expenses.removeAt(i)
     }
