@@ -158,15 +158,27 @@ fun overallTotal(): Double {
 
 fun totalExpenseByCategory() {
     var total = 0.0
-    print("Enter the category you want: ")
-    val categoryTotal = readln()
+    var isFound = false
+    try{
+        print("Enter the category you want: ")
+        val categoryTotal = readln().takeIf { it.isNotBlank() }?:throw NullPointerException("Category cannot be empty.")
 
-    for (expense in expenses) {
-        if (expense.containsValue(categoryTotal)) {
-            total += expense["amount"]?.toDouble()!!
+        for (expense in expenses) {
+            if (expense.containsValue(categoryTotal)) {
+                total += expense["amount"]?.toDouble()!!
+                isFound = true;
+            }
         }
+
+        if(isFound){
+            println("The overall total with $categoryTotal is R$total")
+        }else{
+            println("Category does not exist")
+        }
+
+    }catch (e: NullPointerException){
+        println(e.message)
     }
-    println("The overall total with $categoryTotal is R$total")
 }
 
 fun deleteExpense() {
