@@ -102,7 +102,7 @@ fun filterByDate() {
     val dateChoice: String
     var exceptionBoolean = false
 
-    try{
+    try {
         print("What date would you like to see? ")
         val date = readln().takeIf { it.isNotBlank() } ?: throw NullPointerException("Date cannot be empty.")
         dateChoice = LocalDate.parse(date).toString()
@@ -113,30 +113,36 @@ fun filterByDate() {
                 found = true
             }
         }
-    }catch (e: DateTimeParseException){
+    } catch (e: DateTimeParseException) {
         exceptionBoolean = true
         println("Date must be YY-MM-DD. e.g. 2000-01-01")
-    }catch (e: NullPointerException){
+    } catch (e: NullPointerException) {
         exceptionBoolean = true
         println(e.message)
-    }finally {
-        if(!found && !exceptionBoolean)
+    } finally {
+        if (!found && !exceptionBoolean)
             println("Expense not found with that date.")
     }
 }
 
 fun filterByAmountRange() {
+    if(expenses.isEmpty()){
+        println("Expense List is empty.")
+        return
+    }
     print("Enter lower limit in the range: ")
-    val lowerLimitRange = readln().toDoubleOrNull()
+    val lowerLimitRange = readln().toDouble()
     print("Enter upper limit in the range: ")
-    val upperLimitRange = readln().toDoubleOrNull()
+    val upperLimitRange = readln().toDouble()
 
     for (expense in expenses) {
-        if (lowerLimitRange == null || upperLimitRange == null) {
-            println("Invalid Input")
+        if (lowerLimitRange >= 0 && upperLimitRange >= 0) {
+            if (expense["amount"]?.toDouble()!! in lowerLimitRange..upperLimitRange) {
+                println("(1) --> $expense")
+            }
+        } else {
+            println("Values cannot be below zero.")
             break
-        } else if (expense["amount"]?.toDouble()!! > lowerLimitRange && expense["amount"]?.toDouble()!! < upperLimitRange) {
-            println("(1) --> $expense")
         }
     }
 }
