@@ -53,7 +53,7 @@ fun main() {
                 6 -> calculateTotalByCategory()
                 7 -> deleteExpense()
                 99 -> userChoice = 99
-                else -> throw NumberFormatException()
+                else -> println("Invalid Index Input")
             }
         } catch (e: NumberFormatException) {
             println(e.message)
